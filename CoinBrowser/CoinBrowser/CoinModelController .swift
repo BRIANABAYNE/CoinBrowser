@@ -9,7 +9,6 @@ import Foundation
 
 class CoinModelController {
     
-    
     // MARK: - Properties
     // Main URL
     private static let urlString = "https://api.coingecko.com/api/v3"
@@ -18,9 +17,7 @@ class CoinModelController {
     private static let kCoins = "coins"
     private static let kList = "list"
     
-    
     static var coins: [Coin] = []
-    
     
     // MARK: - Functions - Create,Read,Update,Delete
     
@@ -29,12 +26,10 @@ class CoinModelController {
     static func fetchCoins(completion: @escaping (Bool) -> Void) {
         guard let baseURL = URL(string: urlString) else { return completion(false) }
         
-        
         // step 1 build and complete URL
         let coinsURL = baseURL.appendingPathComponent(kCoins)
         let finalURl = coinsURL.appendingPathComponent(kList)
         print(finalURl)
-        
         
         // step 2, Data task -
         
@@ -45,47 +40,30 @@ class CoinModelController {
                 
                 completion(false)
                 
-                
             }
             
             // check for Data
             guard let data = coinData else {
-            completion(false)
+                completion(false)
                 return
             }
             
             do { // do this by trying all of this
                 if let topLevelArrayOfCoinDictionaries = try
                     JSONSerialization.jsonObject(with: data, options:.allowFragments) as? [[String: String]] {
-                        for coinDictionary in topLevelArrayOfCoinDictionaries {
-                            if let parsedCoin = Coin(dictionary: coinDictionary) {
-                                coins.append(parsedCoin) }
-                        }
+                    for coinDictionary in topLevelArrayOfCoinDictionaries {
+                        if let parsedCoin = Coin(dictionary: coinDictionary) {
+                            coins.append(parsedCoin) }
                     }
-                
+                }
+                completion(true)
             } catch {
                 print("There was an error in Do-Try-Catch: \(error.localizedDescription)")
                 completion(false)
             }
             
-            
-            
         }.resume()
         
-        
-        
-        
-        
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //read
     
 }
